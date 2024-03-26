@@ -25,7 +25,37 @@ def create_model(hl = 2, hu = 100, dropout = False, rate = 0.3, regularize = Fal
     if not regularize:
         reg = None
     model = Sequential()
-    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "relu"))
+    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "sigmoid"))
+    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "sigmoid"))
+    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "sigmoid"))
+    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "sigmoid"))
+    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "sigmoid"))
+    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "sigmoid"))
+    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "sigmoid"))
+    
+    if dropout: 
+        model.add(Dropout(rate, seed = 100))
+    for layer in range(hl):
+        model.add(Dense(hu, activation = "relu", activity_regularizer = reg))
+        if dropout:
+            model.add(Dropout(rate, seed = 100))
+    model.add(Dense(1, activation = "sigmoid"))
+    model.compile(loss = "binary_crossentropy", optimizer = optimizer, metrics = ["accuracy"])
+    return model
+
+
+def create_model1(hl = 2, hu = 100, dropout = False, rate = 0.3, regularize = False,
+                 reg = l1(0.0005), optimizer = optimizer, input_dim = None):
+    if not regularize:
+        reg = None
+    model = Sequential()
+    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "sigmoid"))
+    model.add(Dense(hu, input_dim = input_dim *4, activity_regularizer = reg ,activation = "relu"))
+    model.add(Dense(hu, input_dim = input_dim * 3, activity_regularizer = reg ,activation = "relu"))
+    model.add(Dense(hu, input_dim = input_dim * 2, activity_regularizer = reg ,activation = "sigmoid"))
+    
+    model.add(Dense(hu, input_dim = input_dim, activity_regularizer = reg ,activation = "sigmoid"))
+    
     if dropout: 
         model.add(Dropout(rate, seed = 100))
     for layer in range(hl):
